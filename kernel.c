@@ -2,25 +2,16 @@
 #include "types.h"
 #include "serial.h"
 #include "string.h"
+#include "memory.h"
+#include "process.h"
+#include "scheduler.h"
 
 #define MAX_INPUT 128
 
-void kmain(void) {
+void shell_process() {
     char input[MAX_INPUT];
     int pos = 0;
     
-    /* Initialize hardware */
-    serial_init();
-    
-    /* Print welcome message */
-    serial_puts("\n");
-    serial_puts("========================================\n");
-    serial_puts("    kacchiOS - Minimal Baremetal OS\n");
-    serial_puts("========================================\n");
-    serial_puts("Hello from kacchiOS!\n");
-    serial_puts("Running null process...\n\n");
-    
-    /* Main loop - the "null process" */
     while (1) {
         serial_puts("kacchiOS> ");
         pos = 0;
@@ -53,7 +44,36 @@ void kmain(void) {
             serial_puts(input);
             serial_puts("\n");
         }
+        
+        /* Yield to scheduler */
+        yield();
     }
+}
+
+void kmain(void) {
+    /* Initialize hardware */
+    serial_init();
+    
+    /* Initialize components */
+    init_scheduler();
+    
+    /* Print welcome message */
+    serial_puts("\n");
+    serial_puts("========================================\n");
+    serial_puts("    kacchiOS - Minimal Baremetal OS\n");
+    serial_puts("========================================\n");
+    serial_puts("Hello from kacchiOS!\n");
+    serial_puts("Starting processes...\n\n");
+    
+    /* Create shell process */
+    int pid = create_process(shell_process);
+    if (pid == -1) {
+        serial_puts("Failed to create process\n");
+        for (;;) __asm__ volatile ("hlt");
+    }
+    
+    /* Start scheduling */
+    schedule();
     
     /* Should never reach here */
     for (;;) {

@@ -14,16 +14,11 @@ kacchiOS is a simple, bare-metal operating system built from scratch for educati
 
 - ✅ **Multiboot-compliant bootloader** - Boots via GRUB/QEMU
 - ✅ **Serial I/O driver** (COM1) - Communication via serial port
-- ✅ **Null process** - Single process that reads and echoes input
+- ✅ **Memory Manager** - Heap and stack allocation/deallocation
+- ✅ **Process Manager** - Process creation, termination, state management
+- ✅ **Scheduler** - Round-robin scheduling with context switching
 - ✅ **Basic string utilities** - Essential string operations
 - ✅ **Clean, documented code** - Easy to understand and extend
-
-### Future Extensions (Student Assignments)
-
-Students will extend kacchiOS by implementing:
-- 📝 **Memory Manager**
-- 📝 **Process Manager**
-- 📝 **Scheduler**
 
 ## 🚀 Quick Start
 
@@ -73,7 +68,13 @@ Type something and press Enter - it will echo back!
 ```
 kacchiOS/
 ├── boot.S          # Bootloader entry point (Assembly)
-├── kernel.c        # Main kernel (null process)
+├── kernel.c        # Main kernel with process management
+├── memory.c        # Memory manager implementation
+├── memory.h        # Memory manager interface
+├── process.c       # Process manager implementation
+├── process.h       # Process manager interface
+├── scheduler.c     # Scheduler implementation
+├── scheduler.h     # Scheduler interface
 ├── serial.c        # Serial port driver (COM1)
 ├── serial.h        # Serial driver interface
 ├── string.c        # String utility functions
@@ -138,3 +139,4 @@ kacchiOS was created as an educational tool for teaching operating system concep
 - Inspired by XINU OS
 - Built with guidance from OSDev community
 - Thanks to all students who have contributed
+# CSE3202Project
