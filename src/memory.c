@@ -6,9 +6,9 @@
 
 extern uint32_t __kernel_end;
 
-static uint8_t* heap_start = (uint8_t*)&__kernel_end;
-static uint8_t* heap_end = heap_start + HEAP_SIZE;
-static uint8_t* heap_current = heap_start;
+static uint8_t* heap_start;
+static uint8_t* heap_end;
+static uint8_t* heap_current;
 
 typedef struct block {
     size_t size;
@@ -19,6 +19,8 @@ typedef struct block {
 static block_t* free_list = NULL;
 
 static void init_heap() {
+    heap_start = (uint8_t*)&__kernel_end;
+    heap_end = heap_start + HEAP_SIZE;
     free_list = (block_t*)heap_start;
     free_list->size = HEAP_SIZE - sizeof(block_t);
     free_list->free = 1;
